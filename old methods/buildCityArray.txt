@@ -1,0 +1,28 @@
+public void buildCityArray(){
+        int counter = 0;
+        for (int i=0; i<11; i++){
+            for (int j=0; j<21; j++){
+                if (boardDataArray[i][j]==5){
+                    cityDataArray[0][counter] = counter+1;
+                    System.out.print(cityDataArray[0][counter] +", ");
+                    cityDataArray[1][counter] = i;
+                    System.out.print(cityDataArray[1][counter] + ", ");
+                    cityDataArray[2][counter] = j;
+                    System.out.print(cityDataArray[2][counter] + ", ");
+                    System.out.println();
+                    counter++;
+                }
+            }
+        }
+        for (int i=0;i<3; i++){
+            for (int j=0; j<54; j++)
+                System.out.print(cityDataArray[i][j] +", ");
+            System.out.println();
+            for (int j=0; j<54; j++)
+                System.out.print(cityDataArray[i][j] + ", ");
+            System.out.println();
+            for (int j=0; j<54; j++)
+                System.out.print(cityDataArray[i][j] + ", ");
+            System.out.println();
+        }
+    }

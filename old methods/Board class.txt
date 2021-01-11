@@ -1,0 +1,131 @@
+package com.denisiuk.catan.entity;
+
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class Board {
+
+    int boardDataArray[][] =
+               // 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20
+           /*0*/{{0, 0, 0, 0, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 0, 0, 0, 0},
+           /* 1*/{0, 0, 0 ,0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0},
+           /* 2*/{0, 0, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 0, 0},
+           /* 3*/{0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0},
+           /* 4*/{5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5},
+           /* 5*/{7, 0, 0, 0, 7, 0 ,0, 0, 7, 0, 0, 0 ,7, 0, 0, 0, 7, 0, 0, 0, 7},
+           /* 6*/{5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5},
+           /* 7*/{0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0},
+           /* 8*/{0, 0, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 0, 0},
+           /* 9*/{0, 0, 0 ,0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0},
+           /*10*/{0, 0, 0, 0, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 7, 5, 0, 0, 0, 0}};
+
+    int cityDataArray[][] = {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,
+            28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54},
+            {0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+                    6, 6, 8, 8, 8, 8, 8, 8, 8, 8, 8, 10, 10, 10, 10, 10, 10, 10},
+            {4, 6, 8, 10, 12, 14, 16, 2, 4, 6, 8, 10, 12, 14, 16, 18, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 0, 2, 4, 6,
+                    8, 10, 12, 14, 16, 18, 20, 2, 4, 6, 8, 10, 12, 14, 16, 18, 4, 6, 8, 10, 12, 14, 16}};
+
+    int roadDataArray[][] = new int[11][21];
+
+    boolean check = true;
+
+    public int freeCity(int column, int row){
+        System.out.println("begin of free city");
+        if (checkBoardDataArray(column, row) == true) {
+            for (int i = 0; i < 54; i++) {
+                if (column == cityDataArray[1][i] && row == cityDataArray[2][i]) {
+                    cityDataArray[0][i] = -1;
+                    System.out.println(cityDataArray[1][i] + " " + cityDataArray[2][i] + "| owner: " + cityDataArray[0][i]);
+                    return 1;
+                }
+            }
+        }
+        System.out.println("free city - one or more nearby is occupied");
+        System.out.println("end of free city");
+        return 1;
+    }
+
+    public void roadArray(){ }
+
+    public int getBoardDataArray(int column, int row) {
+        return boardDataArray[column][row];
+    }
+
+    public boolean checkBoardDataArray(int column, int row){
+        System.out.println("begin of board checking");
+
+
+
+                    if (checkOwner(column, row) == false){
+                        return false;
+                    }
+                    if(column != 0 && boardDataArray[colUp(column)][row] == 7){
+                        check = checkOwner(column - 2, row);
+                        System.out.println("colUp " + (column-2) + " " + row);
+                    }
+                    if(column !=10 && boardDataArray[colDown(column)][row] == 7){
+                        check = checkOwner(column + 2, row);
+                        System.out.println("colDown " + (column+2) + " " + row);
+                    }
+                    if(row != 0 && boardDataArray[column][rowLeft(row)] == 7){
+                        check = checkOwner(column, row - 2);
+                        System.out.println("rowLeft " + column + " " + (row-2));
+                    }
+                    if(row != 20 && boardDataArray[column][rowRight(row)] == 7){
+                        check = checkOwner(column , row + 2);
+                        System.out.println("rowRight " + column + " " + (row+2));
+                    }
+            System.out.println("success!!!");
+        return check;
+    }
+
+    public int colUp(int column){
+        return column - 1;
+    }
+    public int colDown(int column){
+        return column + 1;
+    }
+    public int rowLeft(int row){
+        return row - 1;
+    }
+    public int rowRight(int row){
+        return row + 1;
+    }
+    public boolean checkOwner(int column, int row){
+        for (int i=0; i<54; i++){
+            if (column == cityDataArray[1][i] && row == cityDataArray[2][i]){
+                if (cityDataArray [0][i]  != i + 1){
+                    System.out.println(column + " " + row + " is occupied");
+                    return false;
+                }
+            }
+        }
+        return check;
+    }
+
+    public void show() {
+        for (int i = 0; i < 11; i++) {
+            System.out.println();
+            for (int j = 0; j < 21; j++) {
+                System.out.print(getBoardDataArray(i, j) + "  ");
+            }
+        }
+    }
+
+    public int getCityDataArray(int column, int row) {
+        return cityDataArray[column][row];
+    }
+
+    public void setCityDataArrayValue(int column, int row) {
+
+        for (int i=0; i<54; i++){
+            if (column == cityDataArray[1][i] && row == cityDataArray[2][i]){
+                cityDataArray[0][i] = -1;
+                System.out.println(cityDataArray[1][i] + " " + cityDataArray[2][i] + "| owner: " + cityDataArray[0][i]);
+            }
+        }
+        System.out.println("kurwa chuj");
+    }
+}
