@@ -1,6 +1,5 @@
 package com.denisiuk.catan.service;
 
-import com.denisiuk.catan.entity.Board;
 import com.denisiuk.catan.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,29 +13,27 @@ public class BoardService {
     @Autowired
     private PlayerService playerService;
 
-    private Board board;
-
     int playerCount;
 
     int dice;
 
-    int address[] = new int[2];
+    int[] address = new int[2];
 
     String endl="\n";
 
-    String resourceArray[] = {"stone", "stone", "stone", "ore", "ore", "ore", "grain", "grain", "grain", "grain",
+    String[] resourceArray = {"stone", "stone", "stone", "ore", "ore", "ore", "grain", "grain", "grain", "grain",
             "wood", "wood", "wood", "wood", "sheep", "sheep", "sheep", "sheep"};
 
     List<String> resourceList = new ArrayList<String>();
 
     public List<Player> playerList = new LinkedList<Player>();
 
-    int numberArray[] = {5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 11, 3};
+    int[] numberArray = {5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 11, 3};
 
-    int addressArray[][] = {{1, 1,  1,  3, 3, 3,  3,  5, 5, 5,  5,  7, 7, 7,  7,  9, 9, 9, 9},
+    int[][] addressArray = {{1, 1,  1,  3, 3, 3,  3,  5, 5, 5,  5,  7, 7, 7,  7,  9, 9, 9, 9},
                             {6, 10, 14, 4, 8, 12, 16, 2, 6, 14, 18, 4, 8, 12, 16, 6, 10, 14}};
 
-    int checkAddressArray[][] = new int[2][6];
+    int[][] checkAddressArray = new int[2][6];
 
     public List initializeBoard(){
         for (int i=0; i<resourceArray.length; i++){
@@ -46,7 +43,7 @@ public class BoardService {
         return resourceList;
     }
 
-    public int countResources(){
+    public void countResources(){
         int comparator = getDice();
         for (int i=0; i<18; i++){
             if (comparator == numberArray[i] ){
@@ -75,7 +72,6 @@ public class BoardService {
             }else
                 thief();
         }
-        return 1337;
     }
 
     public List<Player> checkOrder(){
@@ -84,13 +80,13 @@ public class BoardService {
         boolean switcher = false;
         int counter = 0;
         setPlayerCount(4);
-            int order[][] = {{0, 0, 0, 0}, {1, 2, 3, 4}};
+            int[][] order = {{0, 0, 0, 0}, {1, 2, 3, 4}};
             for (int i=1; i<5; i++){
             diceRoll();
             order[0][i-1]=getDice();
             System.out.println("player " + i + " rolled " + getDice());
         }
-        while (switcher == false) {
+        while (!switcher) {
             for (int i = 0; i < 4; i++) {
                 for (int j = i +1; j < 4; j++) {
                     System.out.println(order[0][i] + " | " + order[0][j] + " ||| " + (i+1) + " | " + (j+1));
@@ -203,17 +199,7 @@ public class BoardService {
         this.playerCount = playerCount;
     }
 
-    public int[][] getAddressArray() {
-        return addressArray;
-    }
-
     public int getAddressArrayValue(int column, int row) {
         return addressArray[column][row];
     }
-
-    public int getNumberArrayValue(int i){
-        return numberArray[i];
-    }
-
-
 }
