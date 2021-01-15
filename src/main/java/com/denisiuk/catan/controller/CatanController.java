@@ -2,6 +2,7 @@ package com.denisiuk.catan.controller;
 
 import com.denisiuk.catan.entity.Board;
 import com.denisiuk.catan.entity.Player;
+import com.denisiuk.catan.service.BoardHelper;
 import com.denisiuk.catan.service.BoardService;
 import com.denisiuk.catan.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class CatanController {
     @Autowired
     private Board board;
 
+    @Autowired
+    private BoardHelper boardHelper;
+
     @RequestMapping("/play")
     public String playGame(Model model){
         System.out.println("______________________");
@@ -47,6 +51,7 @@ public class CatanController {
         model.addAttribute("boardArray", boardService.initializeBoard());
         model.addAttribute("numberArray", boardService.getNumberArray());
         model.addAttribute("endl", boardService.getEndl());
+        boardHelper.addStone(1, 5);
         System.out.println("goodbye from startGame");
         System.out.println("______________________");
         return "redirect:/showmap";

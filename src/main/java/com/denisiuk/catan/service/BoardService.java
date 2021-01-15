@@ -78,14 +78,10 @@ public class BoardService {
         return 1337;
     }
 
-    public int countResources2(){
-        return 1;
-    }
-
     public List<Player> checkOrder(){
         System.out.println("________________________________");
         System.out.println("hello from checkOrder");
-        boolean seba = false;
+        boolean switcher = false;
         int counter = 0;
         setPlayerCount(4);
             int order[][] = {{0, 0, 0, 0}, {1, 2, 3, 4}};
@@ -94,7 +90,7 @@ public class BoardService {
             order[0][i-1]=getDice();
             System.out.println("player " + i + " rolled " + getDice());
         }
-        while (seba == false) {
+        while (switcher == false) {
             for (int i = 0; i < 4; i++) {
                 for (int j = i +1; j < 4; j++) {
                     System.out.println(order[0][i] + " | " + order[0][j] + " ||| " + (i+1) + " | " + (j+1));
@@ -115,7 +111,7 @@ public class BoardService {
             System.out.println("counter= " + counter);
             System.out.println();
             if (counter == 0)
-                seba = true;
+                switcher = true;
             if (counter == 1)
                 counter = 0;
         }
@@ -182,6 +178,10 @@ public class BoardService {
         return resourceList;
     }
 
+    public String getResourceListValue(int i){
+        return resourceList.get(i);
+    }
+
     public int[] initializeBoardNumbers(){
         Collections.shuffle(Arrays.asList(numberArray));
         return numberArray;
@@ -210,4 +210,10 @@ public class BoardService {
     public int getAddressArrayValue(int column, int row) {
         return addressArray[column][row];
     }
+
+    public int getNumberArrayValue(int i){
+        return numberArray[i];
+    }
+
+
 }
