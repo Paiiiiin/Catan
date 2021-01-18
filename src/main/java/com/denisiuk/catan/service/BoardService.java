@@ -1,5 +1,6 @@
 package com.denisiuk.catan.service;
 
+import com.denisiuk.catan.entity.Board;
 import com.denisiuk.catan.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,65 +14,67 @@ public class BoardService {
     @Autowired
     private PlayerService playerService;
 
+    @Autowired
+    private Board board;
+
+    @Autowired
+    private BoardHelper boardHelper;
+
     int playerCount;
 
     int dice;
-
-    int[] address = new int[2];
 
     String endl="\n";
 
     String[] resourceArray = {"stone", "stone", "stone", "ore", "ore", "ore", "grain", "grain", "grain", "grain",
             "wood", "wood", "wood", "wood", "sheep", "sheep", "sheep", "sheep"};
 
-    List<String> resourceList = new ArrayList<String>();
+    List<String> resourceList = new ArrayList<>();
 
-    public List<Player> playerList = new LinkedList<Player>();
+    public List<Player> playerList = new LinkedList<>();
 
-    int[] numberArray = {5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 11, 3};
-
-    int[][] addressArray = {{1, 1,  1,  3, 3, 3,  3,  5, 5, 5,  5,  7, 7, 7,  7,  9, 9, 9, 9},
-                            {6, 10, 14, 4, 8, 12, 16, 2, 6, 14, 18, 4, 8, 12, 16, 6, 10, 14}};
-
-    int[][] checkAddressArray = new int[2][6];
+    int[][] mapArray = {{5, 2,  6,  3, 8, 10, 9, 12, 11,4,  8, 10, 9, 4,  5,  6, 11, 3},
+                        {1, 1,  1,  3, 3, 3,  3,  5, 5, 5,  5,  7, 7, 7,  7,  9, 9,  9},
+                        {6, 10, 14, 4, 8, 12, 16, 2, 6, 14, 18, 4, 8, 12, 16, 6, 10, 14}};
 
     public List initializeBoard(){
         for (int i=0; i<resourceArray.length; i++){
             resourceList.add(resourceArray[i]);
         }
         Collections.shuffle(resourceList);
+
         return resourceList;
     }
 
     public void countResources(){
-        int comparator = getDice();
-        for (int i=0; i<18; i++){
-            if (comparator == numberArray[i] ){
-                System.out.println("roll " + comparator);
-                System.out.println(resourceList.get(i) +" + 1");
-                System.out.println("col " + getAddressArrayValue(0, i));
-                System.out.println("row " + getAddressArrayValue(1, i));
-                checkAddressArray[1][0] = getAddressArrayValue(1, i) - 2;
-                checkAddressArray[1][1] = getAddressArrayValue(1, i);
-                checkAddressArray[1][2] = getAddressArrayValue(1, i) + 2;
-                checkAddressArray[1][3] = getAddressArrayValue(1, i) - 2;
-                checkAddressArray[1][4] = getAddressArrayValue(1, i);
-                checkAddressArray[1][5] = getAddressArrayValue(1,i) + 2;
-                for (int j=0; j<3;j++){
-                    checkAddressArray[0][j] = getAddressArrayValue(0, i) - 1;
+        int column;
+        int row;
+        for (int i=0; i<18; i++)
+            if (getDice() == mapArray[0][i]){
+                column = mapArray[1][i];
+                row = mapArray[2][i];
+                if (board.checkOwner(column - 1, row)){
+                    boardHelper.chooseResource(board.getBoardDataArrayValue(column -1, row), resourceList.get(i), 1);
                 }
-                for (int j=3; j<6; j++){
-                    checkAddressArray[0][j] = getAddressArrayValue(0, i) + 1;
+                if (board.checkOwner(column - 1, row - 2)){
+                    boardHelper.chooseResource(board.getBoardDataArrayValue(column -1, row), resourceList.get(i), 1);
                 }
-                for (int j=0; j<2; j++){
-                    System.out.println();
-                    for (int s=0; s<6; s++){
-                        System.out.print(checkAddressArray[j][s] + " ");
-                    }
+                if (board.checkOwner(column - 1, row + 2)){
+                    boardHelper.chooseResource(board.getBoardDataArrayValue(column -1, row +2), resourceList.get(i), 1);
                 }
-            }else
+                if (board.checkOwner(column + 1, row)){
+                    boardHelper.chooseResource(board.getBoardDataArrayValue(column +1, row), resourceList.get(i), 1);
+                }
+                if (board.checkOwner(column + 1, row - 2)){
+                    boardHelper.chooseResource(board.getBoardDataArrayValue(column +1, row -2), resourceList.get(i), 1);
+                }
+                if (board.checkOwner(column + 1, row + 2)){
+                    boardHelper.chooseResource(board.getBoardDataArrayValue(column +1, row +2), resourceList.get(i), 1);
+                }
+
+            }else {
                 thief();
-        }
+            }
     }
 
     public List<Player> checkOrder(){
@@ -143,6 +146,7 @@ public class BoardService {
         System.out.println("goodbye from checkOrder");
         System.out.println("____________________________");
         setPlayerList(playerList);
+
         return playerList;
     }
 
@@ -171,20 +175,13 @@ public class BoardService {
     }
 
     public List<String> getResourceList() {
+
         return resourceList;
     }
 
     public String getResourceListValue(int i){
+
         return resourceList.get(i);
-    }
-
-    public int[] initializeBoardNumbers(){
-        Collections.shuffle(Arrays.asList(numberArray));
-        return numberArray;
-    }
-
-    public int[] getNumberArray() {
-        return numberArray;
     }
 
     public String getEndl() {
@@ -199,7 +196,7 @@ public class BoardService {
         this.playerCount = playerCount;
     }
 
-    public int getAddressArrayValue(int column, int row) {
-        return addressArray[column][row];
+    public int[][] getMapArray() {
+        return mapArray;
     }
 }

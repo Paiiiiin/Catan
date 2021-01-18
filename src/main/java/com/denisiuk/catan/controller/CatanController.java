@@ -40,7 +40,7 @@ public class CatanController {
         boardService.setDice(0);
         model.addAttribute("roll", boardService.getDice());
         model.addAttribute("boardArray", boardService.initializeBoard());
-        model.addAttribute("numberArray", boardService.getNumberArray());
+        model.addAttribute("mapArray", boardService.getMapArray());
         model.addAttribute("endl", boardService.getEndl());
         System.out.println("goodbye from startGame");
         System.out.println("______________________");
@@ -52,7 +52,7 @@ public class CatanController {
         System.out.println("______________________");
         System.out.println("hello from showMap no param");
         model.addAttribute("boardArray", boardService.getResourceList());
-        model.addAttribute("numberArray", boardService.getNumberArray());
+        model.addAttribute("mapArray", boardService.getMapArray());
         model.addAttribute("endl", boardService.getEndl());
         model.addAttribute("roll", boardService.getDice());
         System.out.println("goodbye from showMap no param");
@@ -65,7 +65,7 @@ public class CatanController {
         System.out.println("______________________");
         System.out.println("hello from showMap with param");
         model.addAttribute("boardArray", boardService.getResourceList());
-        model.addAttribute("numberArray", boardService.getNumberArray());
+        model.addAttribute("mapArray", boardService.getMapArray());
         model.addAttribute("endl", boardService.getEndl());
         model.addAttribute("roll", boardService.getDice());
         board.freeCity(column, row);
